@@ -1,26 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
+void find_largest_blob(int size);
+void generate_map(int size);
+int check_blobs_nearby(int num, int size);
+
+#define USE_MAP_FROM_FILE 1
+#define SIZE 20
 
 char **game_field;
-void find_largest_blob(int size);
-int check_blobs_nearby(int num, int size);
-int blobs[10];
 
 int main(void *args)
 {
+
   int size;
+#if USE_MAP_FROM_FILE
+    scanf("%d", &size);
+    printf("%dx%d\n", size, size);
+    printf("%d\n", size*size);
 
-  scanf("%d", &size);
-  printf("%dx%d\n", size, size);
-  printf("%d\n", size*size);
+    game_field = calloc(size*size, sizeof(char));
 
-  game_field = calloc(size*size, sizeof(char));
+    for (int i = 0; i <= size*size; i++) {
+      scanf("%c", &game_field[i]);
+      if (i % size == 0 && i != 0) getchar();
+    }
+#else
+    size = SIZE;
+    generate_map(SIZE);
+#endif
 
-  for (int i = 0; i <= size*size; i++) {
-    scanf("%c", &game_field[i]);
-    if (i % size == 0 && i != 0) getchar();
-  }
 
   for (int i = 0; i <= size*size; i++) {
     printf("%c", game_field[i]);
@@ -69,5 +80,18 @@ int check_blobs_nearby(int num, int size)
   }
 
   return sum;
+}
+
+void generate_map(int size)
+{
+  printf("Generating map!\n");
+  game_field = calloc(size*size, sizeof(char));
+
+  srand(time(NULL)); 
+  for (int i = 0; i <= size*size; i++) {
+    int rv = rand() % 101;
+    if (rv < 70) game_field[i] = (char*)'1';
+    else game_field[i] = (char*)'0';
+  }
 }
 
