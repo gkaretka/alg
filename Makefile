@@ -1,5 +1,5 @@
 make:
-	gcc main.c
+	gcc -std=c11 main.c
 
 t1:
 	cat test1.file | ./a.out
